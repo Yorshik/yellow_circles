@@ -1,31 +1,34 @@
-from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtGui import QPainter, QColor
 import sys
-from PyQt5 import uic
-from PyQt5.QtCore import QPoint
 from random import randint
 
+from PyQt5.QtCore import QPoint
+from PyQt5.QtGui import QPainter, QColor
+from PyQt5.QtWidgets import QApplication, QWidget
 
-class YellowCircles(QWidget):
+from ui import Ui_Form
+
+
+class YellowCircles(QWidget, Ui_Form):
     def __init__(self):
         super().__init__()
         self.qp = QPainter()
         self.flag = False
+        self.setupUi(self)
         self.setup()
 
     def setup(self):
-        uic.loadUi('Ui.ui', self)
-        self.create_yellow_circle.clicked.connect(self.draw_yellow_circle)
+        self.create_circle.clicked.connect(self.draw_circle)
 
-    def draw_yellow_circle(self):
+    def draw_circle(self):
         self.flag = True
         self.update()
 
     def paintEvent(self, event):
         if self.flag:
             self.qp.begin(self)
-            self.qp.setBrush(QColor(255, 255, 0))
-            self.qp.setPen(QColor(255, 255, 0))
+            color = randint(0, 255), randint(0, 255), randint(0, 255)
+            self.qp.setBrush(QColor(*color))
+            self.qp.setPen(QColor(*color))
             r = randint(1, 100)
             self.qp.drawEllipse(QPoint(200, 260), r, r)
             self.qp.end()
